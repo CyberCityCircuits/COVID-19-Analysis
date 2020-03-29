@@ -18,6 +18,11 @@ line = 1
 workbook = Workbook()
 ws = workbook.active
 
+
+sheet_wa = workbook.create_sheet('WA Totals', 0)
+sheet_nc = workbook.create_sheet('NC Totals', 0)
+sheet_ny = workbook.create_sheet('NY Totals', 0)
+sheet_sc = workbook.create_sheet('SC Totals', 0)
 sheet_ga = workbook.create_sheet('GA Totals', 0)
 sheet_us = workbook.create_sheet('US Totals', 0)
 
@@ -202,27 +207,23 @@ def analysis_us():
     sheet_us['D'+str(line)].number_format = '0'
     sheet_us['E'+str(line)].number_format = '00.00%'
 
-    date_object = datetime.date.today()
-
-    workbook.save(filename=cwd_dir + '\\' + str(date_object) + wb_name)
-
-
-def analysis_ga():
+def analysis_state(sheet_name, state_name):
+    print("Parsing State: "+state_name)
     death = 0
     infected = 0
     line = 1
 
-    sheet_ga['A'+str(line)] = ('Date')
-    sheet_ga['B'+str(line)] = ('Infected')
-    sheet_ga['C'+str(line)] = ('Rate')
-    sheet_ga['D'+str(line)] = ('Deaths')
-    sheet_ga['E'+str(line)] = ('Rate')
-    #sheet_ga['F'+str(line)] = ('Recovered')
-    #sheet_ga['G'+str(line)] = ('Rate')
-    sheet_ga['F'+str(line)] = ('Avaerage (7-Day)')
+    sheet_name['A'+str(line)] = ('Date')
+    sheet_name['B'+str(line)] = ('Infected')
+    sheet_name['C'+str(line)] = ('Rate')
+    sheet_name['D'+str(line)] = ('Deaths')
+    sheet_name['E'+str(line)] = ('Rate')
+    #sheet_name['F'+str(line)] = ('Recovered')
+    #sheet_name['G'+str(line)] = ('Rate')
+    sheet_name['F'+str(line)] = ('Avaerage (7-Day)')
 
-    sheet_ga.column_dimensions['A'].width = 10
-    sheet_ga.column_dimensions['F'].width = 16
+    sheet_name.column_dimensions['A'].width = 10
+    sheet_name.column_dimensions['F'].width = 16
 
     line += 1 
 
@@ -239,12 +240,12 @@ def analysis_ga():
                 line_count = 0
                 for row in csv_reader:
                     if row[3] == 'US':
-                        if row[2].lower() == 'georgia':
+                        if row[2].lower() == state_name:
                             death = death + int(row[8])
                             infected = infected + int(row[7])
                             recovered = recovered + int(row[9])
                     if row[1].lower() == 'us':
-                        if row[0].lower() == 'georgia':
+                        if row[0].lower() == state_name:
                             if row[4] != '':
                                 death = death + int(row[4])
                             if row[3] != '':
@@ -255,45 +256,45 @@ def analysis_ga():
                     line_count += 1
                 #print(f'Processed {line_count} lines.')    
 
-            sheet_ga['A'+str(line)] = date
-            sheet_ga['B'+str(line)] = infected
-            sheet_ga['D'+str(line)] = death
-            #sheet_ga['F'+str(line)] = recovered
+            sheet_name['A'+str(line)] = date
+            sheet_name['B'+str(line)] = infected
+            sheet_name['D'+str(line)] = death
+            #sheet_name['F'+str(line)] = recovered
 
-            #print(type(sheet_ga['B'+str(line)]))
+            #print(type(sheet_name['B'+str(line)]))
 
-            if sheet_ga['B' + str(line-1)].value == 0:
-                sheet_ga['C' + str(line)] = 'UNDEF'
+            if sheet_name['B' + str(line-1)].value == 0:
+                sheet_name['C' + str(line)] = '0'
             elif line == 2:
-                sheet_ga['C' + str(line)] = 'UNDEF'
+                sheet_name['C' + str(line)] = '0'
             else:
-                sheet_ga['C'+str(line)] = ('=(B' + str(line) + '/B' + str(line-1) + ') - 1')
-                sheet_ga['C'+str(line)].number_format = '00.00%'
+                sheet_name['C'+str(line)] = ('=(B' + str(line) + '/B' + str(line-1) + ') - 1')
+                sheet_name['C'+str(line)].number_format = '00.00%'
             
-            if sheet_ga['D' + str(line-1)].value == 0:
-                sheet_ga['E' + str(line)] = 'UNDEF'
+            if sheet_name['D' + str(line-1)].value == 0:
+                sheet_name['E' + str(line)] = '0'
             elif line == 2:
-                sheet_ga['E' + str(line)] = 'UNDEF'
+                sheet_name['E' + str(line)] = '0'
             else:
-                sheet_ga['E'+str(line)] = ('=(D' + str(line) + '/D' + str(line-1) + ') - 1')
-                sheet_ga['E'+str(line)].number_format = '00.00%'
+                sheet_name['E'+str(line)] = ('=(D' + str(line) + '/D' + str(line-1) + ') - 1')
+                sheet_name['E'+str(line)].number_format = '00.00%'
 
-            #if sheet_ga['F' + str(line-1)].value == 0:
-            #    sheet_ga['G' + str(line)] = 'UNDEF'
+            #if sheet_name['F' + str(line-1)].value == 0:
+            #    sheet_name['G' + str(line)] = 'UNDEF'
             #elif line == 2:
-            #    sheet_ga['G' + str(line)] = 'UNDEF'
+            #    sheet_name['G' + str(line)] = 'UNDEF'
             #else:
-            #    sheet_ga['G'+str(line)] = ('=(F' + str(line) + '/F' + str(line-1) + ') - 1')
-            #    sheet_ga['G'+str(line)].number_format = '00.00%'
+            #    sheet_name['G'+str(line)] = ('=(F' + str(line) + '/F' + str(line-1) + ') - 1')
+            #    sheet_name['G'+str(line)].number_format = '00.00%'
 
-            if sheet_ga['E'+str(line)].value != 'UNDEF':
-                sheet_ga['F'+str(line)] = ('=AVERAGE(E' + str(line-6) + ':E' + str(line)+')')
-                average_7 = sheet_ga['F'+str(line)].value
+            if sheet_name['E'+str(line)].value != '0':
+                sheet_name['F'+str(line)] = ('=AVERAGE(E' + str(line-6) + ':E' + str(line)+')')
+                average_7 = sheet_name['F'+str(line)].value
                 
-                sheet_ga['F'+str(line)].number_format = '00.00%'
+                sheet_name['F'+str(line)].number_format = '00.00%'
             else:
-                sheet_ga['F'+str(line)] = 0
-                sheet_ga['F'+str(line)].number_format = '00.00%'
+                sheet_name['F'+str(line)] = 0
+                sheet_name['F'+str(line)].number_format = '00.00%'
 
             print ('Date: ' + date + ' Infected: ' + str(infected).rjust(7)
                 + ' Death: ' + str(death).rjust(5)
@@ -304,32 +305,40 @@ def analysis_ga():
 
     line += 1
 
-    sheet_ga['A'+str(line)] = 'Average (7-Day):'
+    sheet_name['A'+str(line)] = 'Average (7-Day):'
 
-    sheet_ga['C'+str(line)] = ('=AVERAGE(C' + str(line-8) + ':C' + str(line-2)+')')
-    sheet_ga['C'+str(line)].number_format = '00.00%'
+    sheet_name['C'+str(line)] = ('=AVERAGE(C' + str(line-8) + ':C' + str(line-2)+')')
+    sheet_name['C'+str(line)].number_format = '00.00%'
 
-    sheet_ga['E'+str(line)] = ('=AVERAGE(E' + str(line-8) + ':E' + str(line-2)+')')
-    sheet_ga['E'+str(line)].number_format = '00.00%'
+    sheet_name['E'+str(line)] = ('=AVERAGE(E' + str(line-8) + ':E' + str(line-2)+')')
+    sheet_name['E'+str(line)].number_format = '00.00%'
 
     #Projections
     line += 2
 
-    sheet_ga['A'+str(line)] = ('Projections')
+    sheet_name['A'+str(line)] = ('Projections')
     line += 1
 
-    average_7 = ((int(sheet_ga['D'+str(line-5)].value)/ int(sheet_ga['D'+str(line-6)].value)) + 
-                (int(sheet_ga['D'+str(line-6)].value)/ int(sheet_ga['D'+str(line-7)].value)) + 
-                (int(sheet_ga['D'+str(line-7)].value)/ int(sheet_ga['D'+str(line-8)].value)) + 
-                (int(sheet_ga['D'+str(line-8)].value)/ int(sheet_ga['D'+str(line-9)].value)) + 
-                (int(sheet_ga['D'+str(line-9)].value)/ int(sheet_ga['D'+str(line-10)].value)) + 
-                (int(sheet_ga['D'+str(line-10)].value)/int(sheet_ga['D'+str(line-11)].value)) + 
-                (int(sheet_ga['D'+str(line-11)].value)/int(sheet_ga['D'+str(line-12)].value))) / 7
+    if (((sheet_name['D'+str(line-5)].value)  != 0) and 
+        ((sheet_name['D'+str(line-6)].value)  != 0) and 
+        ((sheet_name['D'+str(line-7)].value)  != 0) and 
+        ((sheet_name['D'+str(line-8)].value)  != 0) and 
+        ((sheet_name['D'+str(line-9)].value)  != 0) and 
+        ((sheet_name['D'+str(line-10)].value) != 0) and 
+        ((sheet_name['D'+str(line-11)].value) != 0)):
+
+        average_7 = ((int(sheet_name['D'+str(line-5)].value)/ int(sheet_name['D'+str(line-6)].value)) + 
+                    (int(sheet_name['D'+str(line-6)].value)/ int(sheet_name['D'+str(line-7)].value)) + 
+                    (int(sheet_name['D'+str(line-7)].value)/ int(sheet_name['D'+str(line-8)].value)) + 
+                    (int(sheet_name['D'+str(line-8)].value)/ int(sheet_name['D'+str(line-9)].value)) + 
+                    (int(sheet_name['D'+str(line-9)].value)/ int(sheet_name['D'+str(line-10)].value)) + 
+                    (int(sheet_name['D'+str(line-10)].value)/int(sheet_name['D'+str(line-11)].value)) + 
+                    (int(sheet_name['D'+str(line-11)].value)/int(sheet_name['D'+str(line-12)].value))) / 7
 
     print()
     print()
-    starting_death = int(sheet_ga['D'+str(line-5)].value)
-    starting_date = sheet_ga['A'+str(line-5)].value
+    starting_death = int(sheet_name['D'+str(line-5)].value)
+    starting_date = sheet_name['A'+str(line-5)].value
 
     #month, day, year = (int(x) for x in starting_date.split('-'))
     #print(type(month))
@@ -341,60 +350,68 @@ def analysis_ga():
     print('Final Death Count (US): ' + str(starting_death))
     print('Seven Day Average Increase (US): ' + str(average_7))
 
-    sheet_ga['A'+str(line)] = ('Today')
-    sheet_ga['D'+str(line)] = (starting_death * average_7)
-    sheet_ga['E'+str(line)] = (((int(sheet_ga['D'+str(line)].value)) / starting_death)-1)
-    sheet_ga['D'+str(line)].number_format = '0'
-    sheet_ga['E'+str(line)].number_format = '00.00%'
+    sheet_name['A'+str(line)] = ('Today')
+    sheet_name['D'+str(line)] = (starting_death * average_7)
+    sheet_name['E'+str(line)] = (((int(sheet_name['D'+str(line)].value)) / starting_death)-1)
+    sheet_name['D'+str(line)].number_format = '0'
+    sheet_name['E'+str(line)].number_format = '00.00%'
     line += 1
 
-    sheet_ga['A'+str(line)] = ('Today +1')
-    sheet_ga['D'+str(line)] = (sheet_ga['D'+str(line-1)].value * average_7)
-    sheet_ga['E'+str(line)] = (((int(sheet_ga['D'+str(line)].value)) / starting_death)-1)
-    sheet_ga['D'+str(line)].number_format = '0'
-    sheet_ga['E'+str(line)].number_format = '00.00%'
+    sheet_name['A'+str(line)] = ('Today +1')
+    sheet_name['D'+str(line)] = (sheet_name['D'+str(line-1)].value * average_7)
+    sheet_name['E'+str(line)] = (((int(sheet_name['D'+str(line)].value)) / starting_death)-1)
+    sheet_name['D'+str(line)].number_format = '0'
+    sheet_name['E'+str(line)].number_format = '00.00%'
     line += 1
 
-    sheet_ga['A'+str(line)] = ('Today +2')
-    sheet_ga['D'+str(line)] = (sheet_ga['D'+str(line-1)].value * average_7)
-    sheet_ga['E'+str(line)] = (((int(sheet_ga['D'+str(line)].value)) / starting_death)-1)
-    sheet_ga['D'+str(line)].number_format = '0'
-    sheet_ga['E'+str(line)].number_format = '00.00%'
+    sheet_name['A'+str(line)] = ('Today +2')
+    sheet_name['D'+str(line)] = (sheet_name['D'+str(line-1)].value * average_7)
+    sheet_name['E'+str(line)] = (((int(sheet_name['D'+str(line)].value)) / starting_death)-1)
+    sheet_name['D'+str(line)].number_format = '0'
+    sheet_name['E'+str(line)].number_format = '00.00%'
     line += 1
 
-    sheet_ga['A'+str(line)] = ('Today +3')
-    sheet_ga['D'+str(line)] = (sheet_ga['D'+str(line-1)].value * average_7)
-    sheet_ga['E'+str(line)] = (((int(sheet_ga['D'+str(line)].value)) / starting_death)-1)
-    sheet_ga['D'+str(line)].number_format = '0'
-    sheet_ga['E'+str(line)].number_format = '00.00%'
+    sheet_name['A'+str(line)] = ('Today +3')
+    sheet_name['D'+str(line)] = (sheet_name['D'+str(line-1)].value * average_7)
+    sheet_name['E'+str(line)] = (((int(sheet_name['D'+str(line)].value)) / starting_death)-1)
+    sheet_name['D'+str(line)].number_format = '0'
+    sheet_name['E'+str(line)].number_format = '00.00%'
     line += 1
 
-    sheet_ga['A'+str(line)] = ('Today +4')
-    sheet_ga['D'+str(line)] = (sheet_ga['D'+str(line-1)].value * average_7)
-    sheet_ga['E'+str(line)] = (((int(sheet_ga['D'+str(line)].value)) / starting_death)-1)
-    sheet_ga['D'+str(line)].number_format = '0'
-    sheet_ga['E'+str(line)].number_format = '00.00%'
+    sheet_name['A'+str(line)] = ('Today +4')
+    sheet_name['D'+str(line)] = (sheet_name['D'+str(line-1)].value * average_7)
+    sheet_name['E'+str(line)] = (((int(sheet_name['D'+str(line)].value)) / starting_death)-1)
+    sheet_name['D'+str(line)].number_format = '0'
+    sheet_name['E'+str(line)].number_format = '00.00%'
     line += 1
 
-    sheet_ga['A'+str(line)] = ('Today +5')
-    sheet_ga['D'+str(line)] = (sheet_ga['D'+str(line-1)].value * average_7)
-    sheet_ga['E'+str(line)] = (((int(sheet_ga['D'+str(line)].value)) / starting_death)-1)
-    sheet_ga['D'+str(line)].number_format = '0'
-    sheet_ga['E'+str(line)].number_format = '00.00%'
+    sheet_name['A'+str(line)] = ('Today +5')
+    sheet_name['D'+str(line)] = (sheet_name['D'+str(line-1)].value * average_7)
+    sheet_name['E'+str(line)] = (((int(sheet_name['D'+str(line)].value)) / starting_death)-1)
+    sheet_name['D'+str(line)].number_format = '0'
+    sheet_name['E'+str(line)].number_format = '00.00%'
     line += 1
 
-    sheet_ga['A'+str(line)] = ('Today +6')
-    sheet_ga['D'+str(line)] = (sheet_ga['D'+str(line-1)].value * average_7)
-    sheet_ga['E'+str(line)] = (((int(sheet_ga['D'+str(line)].value)) / starting_death)-1)
-    sheet_ga['D'+str(line)].number_format = '0'
-    sheet_ga['E'+str(line)].number_format = '00.00%'
+    sheet_name['A'+str(line)] = ('Today +6')
+    sheet_name['D'+str(line)] = (sheet_name['D'+str(line-1)].value * average_7)
+    sheet_name['E'+str(line)] = (((int(sheet_name['D'+str(line)].value)) / starting_death)-1)
+    sheet_name['D'+str(line)].number_format = '0'
+    sheet_name['E'+str(line)].number_format = '00.00%'
 
-    date_object = datetime.date.today()
-
-    workbook.save(filename=cwd_dir + '\\' + str(date_object) + wb_name)
+    print()
+    print()
 
 analysis_us()
-analysis_ga()
+analysis_state(sheet_ga, 'georgia')
+analysis_state(sheet_sc, 'south carolina')
+analysis_state(sheet_nc, 'north carolina')
+analysis_state(sheet_ny, 'new york')
+analysis_state(sheet_wa, 'washington')
+
+
+date_object = datetime.date.today()
+
+workbook.save(filename=cwd_dir + '\\' + str(date_object) + wb_name)
 
 print()
 print("Complete")
