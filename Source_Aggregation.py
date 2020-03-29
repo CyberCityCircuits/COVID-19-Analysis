@@ -197,3 +197,7 @@ date_object = datetime.date.today()
 workbook.save(filename=cwd_dir + '\\' + str(date_object) + wb_name)
 
 print("Complete")
+print()
+print()
+input("Press Enter to continue...")
+
