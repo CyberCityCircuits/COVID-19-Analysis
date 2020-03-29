@@ -6,8 +6,10 @@ import openpyxl
 from openpyxl import Workbook
 import datetime
 
-wb_name = '_aggregated.xlsx'
-data_dir = 'C:\\Users\\DREAM\\Documents\\GitHub\\COVID-19 Scripts\\data\\'
+wb_name = '-Aggregated.xlsx'
+
+cwd_dir = os.getcwd()
+data_dir = os.getcwd()+"\\data\\"
 
 death = 0
 infected = 0
@@ -127,8 +129,6 @@ average_7 = ((int(sheet['D'+str(line-5)].value)/ int(sheet['D'+str(line-6)].valu
              (int(sheet['D'+str(line-10)].value)/int(sheet['D'+str(line-11)].value)) + 
              (int(sheet['D'+str(line-11)].value)/int(sheet['D'+str(line-12)].value))) / 7
 
-
-
 print()
 print()
 starting_death = int(sheet['D'+str(line-5)].value)
@@ -151,47 +151,49 @@ sheet['D'+str(line)].number_format = '0'
 sheet['E'+str(line)].number_format = '00.00%'
 line += 1
 
-sheet['A'+str(line)] = ('Day +2')
+sheet['A'+str(line)] = ('Today +1')
 sheet['D'+str(line)] = (sheet['D'+str(line-1)].value * average_7)
 sheet['E'+str(line)] = (((int(sheet['D'+str(line)].value)) / starting_death)-1)
 sheet['D'+str(line)].number_format = '0'
 sheet['E'+str(line)].number_format = '00.00%'
 line += 1
 
-sheet['A'+str(line)] = ('Day +3')
+sheet['A'+str(line)] = ('Today +2')
 sheet['D'+str(line)] = (sheet['D'+str(line-1)].value * average_7)
 sheet['E'+str(line)] = (((int(sheet['D'+str(line)].value)) / starting_death)-1)
 sheet['D'+str(line)].number_format = '0'
 sheet['E'+str(line)].number_format = '00.00%'
 line += 1
 
-sheet['A'+str(line)] = ('Day +4')
+sheet['A'+str(line)] = ('Today +3')
 sheet['D'+str(line)] = (sheet['D'+str(line-1)].value * average_7)
 sheet['E'+str(line)] = (((int(sheet['D'+str(line)].value)) / starting_death)-1)
 sheet['D'+str(line)].number_format = '0'
 sheet['E'+str(line)].number_format = '00.00%'
 line += 1
 
-sheet['A'+str(line)] = ('Day +5')
+sheet['A'+str(line)] = ('Today +4')
 sheet['D'+str(line)] = (sheet['D'+str(line-1)].value * average_7)
 sheet['E'+str(line)] = (((int(sheet['D'+str(line)].value)) / starting_death)-1)
 sheet['D'+str(line)].number_format = '0'
 sheet['E'+str(line)].number_format = '00.00%'
 line += 1
 
-sheet['A'+str(line)] = ('Day +6')
+sheet['A'+str(line)] = ('Today +5')
 sheet['D'+str(line)] = (sheet['D'+str(line-1)].value * average_7)
 sheet['E'+str(line)] = (((int(sheet['D'+str(line)].value)) / starting_death)-1)
 sheet['D'+str(line)].number_format = '0'
 sheet['E'+str(line)].number_format = '00.00%'
 line += 1
 
-sheet['A'+str(line)] = ('Day +7')
+sheet['A'+str(line)] = ('Today +6')
 sheet['D'+str(line)] = (sheet['D'+str(line-1)].value * average_7)
 sheet['E'+str(line)] = (((int(sheet['D'+str(line)].value)) / starting_death)-1)
 sheet['D'+str(line)].number_format = '0'
 sheet['E'+str(line)].number_format = '00.00%'
 
-workbook.save(filename=data_dir + wb_name)
+date_object = datetime.date.today()
+
+workbook.save(filename=cwd_dir + '\\' + str(date_object) + wb_name)
 
 print("Complete")
