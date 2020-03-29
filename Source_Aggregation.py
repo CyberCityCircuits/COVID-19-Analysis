@@ -19,6 +19,7 @@ workbook = Workbook()
 ws = workbook.active
 
 
+sheet_ca = workbook.create_sheet('CA Totals', 0)
 sheet_wa = workbook.create_sheet('WA Totals', 0)
 sheet_nc = workbook.create_sheet('NC Totals', 0)
 sheet_ny = workbook.create_sheet('NY Totals', 0)
@@ -407,6 +408,7 @@ analysis_state(sheet_sc, 'south carolina')
 analysis_state(sheet_nc, 'north carolina')
 analysis_state(sheet_ny, 'new york')
 analysis_state(sheet_wa, 'washington')
+analysis_state(sheet_ca, 'california')
 
 
 date_object = datetime.date.today()
