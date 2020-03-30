@@ -169,8 +169,10 @@ def analysis_state(sheet_name, state_name):
     sheet_name['A'+str(line)] = 'Average (7-Day):'
     sheet_name['C'+str(line)] = ('=AVERAGE(C' + str(line-8) + ':C' + str(line-2)+')')
     sheet_name['C'+str(line)].number_format = '00.00%'
+    
     sheet_name['E'+str(line)] = ('=AVERAGE(E' + str(line-8) + ':E' + str(line-2)+')')
     sheet_name['E'+str(line)].number_format = '00.00%'
+
     #Projections
     line += 2
     sheet_name['A'+str(line)] = ('Projections')
@@ -189,16 +191,13 @@ def analysis_state(sheet_name, state_name):
                     (int(sheet_name['D'+str(line-9)].value)/ int(sheet_name['D'+str(line-10)].value)) + 
                     (int(sheet_name['D'+str(line-10)].value)/int(sheet_name['D'+str(line-11)].value)) + 
                     (int(sheet_name['D'+str(line-11)].value)/int(sheet_name['D'+str(line-12)].value))) / 7
+    
+
     print()
     print()
     starting_death = int(sheet_name['D'+str(line-5)].value)
     starting_date = sheet_name['A'+str(line-5)].value
-    #month, day, year = (int(x) for x in starting_date.split('-'))
-    #print(type(month))
-    #print(str(month) + '-' + str(day) + '-' + str(year))
-    #day += 1
-    #date = datetime.date(month, day, year)
-    #print(date)
+
     print('Final Death Count (US): ' + str(starting_death))
     print('Seven Day Average Increase (US): ' + str(average_7))
     sheet_name['A'+str(line)] = ('Day +1')
@@ -245,60 +244,61 @@ def analysis_state(sheet_name, state_name):
 
     #Add to totals sheet
     sheet_totals['A'+str(line_total)] = state_name.title()
-    sheet_totals['B'+str(line_total)] = 'Projections'
-    sheet_totals['C'+str(line_total)] = 'Increase'
+    sheet_totals['B'+str(line_total)] = (average_7-1)
+    sheet_totals['B'+str(line_total)].number_format = '00.00%'
+
     line_total += 1
     starting_death
-    sheet_totals['A'+str(line_total)] = ("Today's Count")
-    sheet_totals['B'+str(line_total)] = (starting_death)
+    sheet_totals['A'+str(line_total)]   = ("Today's Count")
+    sheet_totals['A'+str(line_total+1)] = (starting_death)
 
-    line_total += 1
-    sheet_totals['A'+str(line_total)] = ('Day +1')
-    sheet_totals['B'+str(line_total)] = (starting_death * average_7)
-    sheet_totals['C'+str(line_total)] = (((int(sheet_totals['B'+str(line_total)].value)) / starting_death)-1)
-    sheet_totals['B'+str(line_total)].number_format = '0'
-    sheet_totals['C'+str(line_total)].number_format = '00.00%'
-    line_total += 1
-    sheet_totals['A'+str(line_total)] = ('Day +2')
-    sheet_totals['B'+str(line_total)] = (sheet_totals['B'+str(line_total-1)].value * average_7)
-    sheet_totals['C'+str(line_total)] = (((int(sheet_totals['B'+str(line_total)].value)) / starting_death)-1)
-    sheet_totals['B'+str(line_total)].number_format = '0'
-    sheet_totals['C'+str(line_total)].number_format = '00.00%'
-    line_total += 1
-    sheet_totals['A'+str(line_total)] = ('Day +3')
-    sheet_totals['B'+str(line_total)] = (sheet_totals['B'+str(line_total-1)].value * average_7)
-    sheet_totals['C'+str(line_total)] = (((int(sheet_totals['B'+str(line_total)].value)) / starting_death)-1)
-    sheet_totals['B'+str(line_total)].number_format = '0'
-    sheet_totals['C'+str(line_total)].number_format = '00.00%'
-    line_total += 1
-    sheet_totals['A'+str(line_total)] = ('Day +4')
-    sheet_totals['B'+str(line_total)] = (sheet_totals['B'+str(line_total-1)].value * average_7)
-    sheet_totals['C'+str(line_total)] = (((int(sheet_totals['B'+str(line_total)].value)) / starting_death)-1)
-    sheet_totals['B'+str(line_total)].number_format = '0'
-    sheet_totals['C'+str(line_total)].number_format = '00.00%'
-    line_total += 1
-    sheet_totals['A'+str(line_total)] = ('Day +5')
-    sheet_totals['B'+str(line_total)] = (sheet_totals['B'+str(line_total-1)].value * average_7)
-    sheet_totals['C'+str(line_total)] = (((int(sheet_totals['B'+str(line_total)].value)) / starting_death)-1)
-    sheet_totals['B'+str(line_total)].number_format = '0'
-    sheet_totals['C'+str(line_total)].number_format = '00.00%'
-    line_total += 1
-    sheet_totals['A'+str(line_total)] = ('Day +6')
-    sheet_totals['B'+str(line_total)] = (sheet_totals['B'+str(line_total-1)].value * average_7)
-    sheet_totals['C'+str(line_total)] = (((int(sheet_totals['B'+str(line_total)].value)) / starting_death)-1)
-    sheet_totals['B'+str(line_total)].number_format = '0'
-    sheet_totals['C'+str(line_total)].number_format = '00.00%'
-    line_total += 1
-    sheet_totals['A'+str(line_total)] = ('Day +7')
-    sheet_totals['B'+str(line_total)] = (sheet_totals['B'+str(line_total-1)].value * average_7)
-    sheet_totals['C'+str(line_total)] = (((int(sheet_totals['B'+str(line_total)].value)) / starting_death)-1)
-    sheet_totals['B'+str(line_total)].number_format = '0'
-    sheet_totals['C'+str(line_total)].number_format = '00.00%'
-    line_total += 1
-    line_total += 1
-    print()
-    print()
+    sheet_totals['B'+str(line_total)]   = ('Day +1')
+    sheet_totals['B'+str(line_total+1)] = (starting_death * average_7)
+    sheet_totals['B'+str(line_total+2)] = (((int(sheet_totals['B'+str(line_total+1)].value)) / starting_death)-1)
+    sheet_totals['B'+str(line_total+1)].number_format = '0'
+    sheet_totals['B'+str(line_total+2)].number_format = '00.00%'
+    
+    sheet_totals['C'+str(line_total)]   = ('Day +2')
 
+    sheet_totals['C'+str(line_total+1)] = (sheet_totals['B'+str(line_total+1)].value * average_7)
+    sheet_totals['C'+str(line_total+2)] = (((int(sheet_totals['C'+str(line_total+1)].value)) / starting_death)-1)
+    sheet_totals['C'+str(line_total+1)].number_format = '0'
+    sheet_totals['C'+str(line_total+2)].number_format = '00.00%'
+    
+    sheet_totals['D'+str(line_total)]   = ('Day +3')
+    sheet_totals['D'+str(line_total+1)] = (sheet_totals['C'+str(line_total+1)].value * average_7)
+    sheet_totals['D'+str(line_total+2)] = (((int(sheet_totals['D'+str(line_total+1)].value)) / starting_death)-1)
+    sheet_totals['D'+str(line_total+1)].number_format = '0'
+    sheet_totals['D'+str(line_total+2)].number_format = '00.00%'
+    
+    sheet_totals['E'+str(line_total)]   = ('Day +4')
+    sheet_totals['E'+str(line_total+1)] = (sheet_totals['D'+str(line_total+1)].value * average_7)
+    sheet_totals['E'+str(line_total+2)] = (((int(sheet_totals['E'+str(line_total+1)].value)) / starting_death)-1)
+    sheet_totals['E'+str(line_total+1)].number_format = '0'
+    sheet_totals['E'+str(line_total+2)].number_format = '00.00%'
+    
+    sheet_totals['F'+str(line_total)]   = ('Day +5')
+    sheet_totals['F'+str(line_total+1)] = (sheet_totals['E'+str(line_total+1)].value * average_7)
+    sheet_totals['F'+str(line_total+2)] = (((int(sheet_totals['F'+str(line_total+1)].value)) / starting_death)-1)
+    sheet_totals['F'+str(line_total+1)].number_format = '0'
+    sheet_totals['F'+str(line_total+2)].number_format = '00.00%'
+    
+    sheet_totals['G'+str(line_total)]   = ('Day +6')
+    sheet_totals['G'+str(line_total+1)] = (sheet_totals['F'+str(line_total+1)].value * average_7)
+    sheet_totals['G'+str(line_total+2)] = (((int(sheet_totals['G'+str(line_total+1)].value)) / starting_death)-1)
+    sheet_totals['G'+str(line_total+1)].number_format = '0'
+    sheet_totals['G'+str(line_total+2)].number_format = '00.00%'
+
+    sheet_totals['H'+str(line_total)]   = ('Day +7')
+    sheet_totals['H'+str(line_total+1)] = (sheet_totals['G'+str(line_total+1)].value * average_7)
+    sheet_totals['H'+str(line_total+2)] = (((int(sheet_totals['H'+str(line_total+1)].value)) / starting_death)-1)
+    sheet_totals['H'+str(line_total+1)].number_format = '0'
+    sheet_totals['H'+str(line_total+2)].number_format = '00.00%'
+
+    line_total += 4
+    
+    print()
+ 
 def collect_totals():
     list_sheets = workbook.sheetnames
     for i in range(len(list_sheets)):
