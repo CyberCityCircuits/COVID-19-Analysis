@@ -18,7 +18,8 @@ line = 1
 workbook = Workbook()
 ws = workbook.active
 
-
+sheet_co = workbook.create_sheet('CO Totals', 0)
+sheet_tx = workbook.create_sheet('TX Totals', 0)
 sheet_ca = workbook.create_sheet('CA Totals', 0)
 sheet_fl = workbook.create_sheet('FL Totals', 0)
 sheet_wa = workbook.create_sheet('WA Totals', 0)
@@ -27,6 +28,7 @@ sheet_ny = workbook.create_sheet('NY Totals', 0)
 sheet_sc = workbook.create_sheet('SC Totals', 0)
 sheet_ga = workbook.create_sheet('GA Totals', 0)
 sheet_us = workbook.create_sheet('US Totals', 0)
+
 
 def analysis_state(sheet_name, state_name):
     print("Parsing State: "+state_name)
@@ -111,7 +113,6 @@ def analysis_state(sheet_name, state_name):
             if sheet_name['E'+str(line)].value != '0':
                 sheet_name['F'+str(line)] = ('=AVERAGE(E' + str(line-6) + ':E' + str(line)+')')
                 average_7 = sheet_name['F'+str(line)].value
-                
                 sheet_name['F'+str(line)].number_format = '00.00%'
             else:
                 sheet_name['F'+str(line)] = 0
@@ -230,6 +231,8 @@ analysis_state(sheet_ny, 'new york')
 analysis_state(sheet_wa, 'washington')
 analysis_state(sheet_ca, 'california')
 analysis_state(sheet_fl, 'florida')
+analysis_state(sheet_co, 'colorado')
+analysis_state(sheet_tx, 'texas')
 
 
 date_object = datetime.date.today()
