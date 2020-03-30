@@ -117,9 +117,9 @@ def analysis_state(sheet_name, state_name):
                 sheet_name['F'+str(line)] = 0
                 sheet_name['F'+str(line)].number_format = '00.00%'
 
-            #print ('Date: ' + date + ' Infected: ' + str(infected).rjust(7)
-            #    + ' Death: ' + str(death).rjust(5)
-            #    )
+            print ('Date: ' + date + ' Infected: ' + str(infected).rjust(7)
+                + ' Death: ' + str(death).rjust(5)
+                )
 
             line += 1
 
@@ -170,49 +170,49 @@ def analysis_state(sheet_name, state_name):
     print('Final Death Count (US): ' + str(starting_death))
     print('Seven Day Average Increase (US): ' + str(average_7))
 
-    sheet_name['A'+str(line)] = ('Today')
+    sheet_name['A'+str(line)] = ('Day +1')
     sheet_name['D'+str(line)] = (starting_death * average_7)
     sheet_name['E'+str(line)] = (((int(sheet_name['D'+str(line)].value)) / starting_death)-1)
     sheet_name['D'+str(line)].number_format = '0'
     sheet_name['E'+str(line)].number_format = '00.00%'
     line += 1
 
-    sheet_name['A'+str(line)] = ('Today +1')
+    sheet_name['A'+str(line)] = ('Day +2')
     sheet_name['D'+str(line)] = (sheet_name['D'+str(line-1)].value * average_7)
     sheet_name['E'+str(line)] = (((int(sheet_name['D'+str(line)].value)) / starting_death)-1)
     sheet_name['D'+str(line)].number_format = '0'
     sheet_name['E'+str(line)].number_format = '00.00%'
     line += 1
 
-    sheet_name['A'+str(line)] = ('Today +2')
+    sheet_name['A'+str(line)] = ('Day +3')
     sheet_name['D'+str(line)] = (sheet_name['D'+str(line-1)].value * average_7)
     sheet_name['E'+str(line)] = (((int(sheet_name['D'+str(line)].value)) / starting_death)-1)
     sheet_name['D'+str(line)].number_format = '0'
     sheet_name['E'+str(line)].number_format = '00.00%'
     line += 1
 
-    sheet_name['A'+str(line)] = ('Today +3')
+    sheet_name['A'+str(line)] = ('Day +4')
     sheet_name['D'+str(line)] = (sheet_name['D'+str(line-1)].value * average_7)
     sheet_name['E'+str(line)] = (((int(sheet_name['D'+str(line)].value)) / starting_death)-1)
     sheet_name['D'+str(line)].number_format = '0'
     sheet_name['E'+str(line)].number_format = '00.00%'
     line += 1
 
-    sheet_name['A'+str(line)] = ('Today +4')
+    sheet_name['A'+str(line)] = ('Day +5')
     sheet_name['D'+str(line)] = (sheet_name['D'+str(line-1)].value * average_7)
     sheet_name['E'+str(line)] = (((int(sheet_name['D'+str(line)].value)) / starting_death)-1)
     sheet_name['D'+str(line)].number_format = '0'
     sheet_name['E'+str(line)].number_format = '00.00%'
     line += 1
 
-    sheet_name['A'+str(line)] = ('Today +5')
+    sheet_name['A'+str(line)] = ('Day +6')
     sheet_name['D'+str(line)] = (sheet_name['D'+str(line-1)].value * average_7)
     sheet_name['E'+str(line)] = (((int(sheet_name['D'+str(line)].value)) / starting_death)-1)
     sheet_name['D'+str(line)].number_format = '0'
     sheet_name['E'+str(line)].number_format = '00.00%'
     line += 1
 
-    sheet_name['A'+str(line)] = ('Today +6')
+    sheet_name['A'+str(line)] = ('Day +7')
     sheet_name['D'+str(line)] = (sheet_name['D'+str(line-1)].value * average_7)
     sheet_name['E'+str(line)] = (((int(sheet_name['D'+str(line)].value)) / starting_death)-1)
     sheet_name['D'+str(line)].number_format = '0'
