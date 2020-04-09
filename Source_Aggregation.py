@@ -93,10 +93,13 @@ def analysis_state(sheet_name, state_name):
         sheet_name['B'+str(line)] = ('Infected')
         sheet_name['C'+str(line)] = ('Rate')
         sheet_name['D'+str(line)] = ('Deaths')
-        sheet_name['E'+str(line)] = ('Rate')
-        sheet_name['F'+str(line)] = ('Avaerage (7-Day)')
+        sheet_name['E'+str(line)] = ('Increase')
+        sheet_name['F'+str(line)] = ('Rate')
+        sheet_name['G'+str(line)] = ('Avaerage (7-Day)')
+        sheet_name['H'+str(line)] = ('Avaerage (3-Day)')
         sheet_name.column_dimensions['A'].width = 10
-        sheet_name.column_dimensions['F'].width = 16
+        sheet_name.column_dimensions['G'].width = 16
+        sheet_name.column_dimensions['H'].width = 16
         line += 1 
         for fname in os.listdir(data_dir):
             death = 0
@@ -148,21 +151,35 @@ def analysis_state(sheet_name, state_name):
                     sheet_name['C'+str(line)].number_format = '00.00%'
                 
                 if sheet_name['D' + str(line-1)].value == 0:
-                    sheet_name['E' + str(line)] = '0'
+                    sheet_name['F' + str(line)] = '0'
                     sheet_name['C'+str(line)].number_format = '00.00%'
                 elif line == 3:
-                    sheet_name['E' + str(line)] = '0'
+                    sheet_name['F' + str(line)] = '0'
                     sheet_name['C'+str(line)].number_format = '00.00%'
                 else:
-                    sheet_name['E'+str(line)] = ('=(D' + str(line) + '/D' + str(line-1) + ') - 1')
-                    sheet_name['E'+str(line)].number_format = '00.00%'
-                if sheet_name['E'+str(line)].value != '0':
-                    sheet_name['F'+str(line)] = ('=AVERAGE(E' + str(line-6) + ':E' + str(line)+')')
-                    average_7 = sheet_name['F'+str(line)].value
+                    sheet_name['F'+str(line)] = ('=(D' + str(line) + '/D' + str(line-1) + ') - 1')
                     sheet_name['F'+str(line)].number_format = '00.00%'
+                if sheet_name['F'+str(line)].value != '0':
+                    sheet_name['G'+str(line)] = ('=AVERAGE(F' + str(line-6) + ':F' + str(line)+')')
+                    average_7 = sheet_name['G'+str(line)].value
+                    sheet_name['G'+str(line)].number_format = '00.00%'
                 else:
-                    sheet_name['F'+str(line)] = 0
-                    sheet_name['F'+str(line)].number_format = '00.00%'
+                    sheet_name['G'+str(line)] = 0
+                    sheet_name['G'+str(line)].number_format = '00.00%'
+
+                if sheet_name['F'+str(line)].value != '0':
+                    sheet_name['H'+str(line)] = ('=AVERAGE(F' + str(line-2) + ':F' + str(line)+')')
+                    average_3 = sheet_name['H'+str(line)].value
+                    sheet_name['H'+str(line)].number_format = '00.00%'
+                else:
+                    sheet_name['H'+str(line)] = 0
+                    sheet_name['H'+str(line)].number_format = '00.00%'                    
+
+                
+                if (line > 3):
+                    sheet_name['E'+str(line)] = ('= D' + str(line) + ' - D' + str(line-1))
+                    #sheet_name['E'+str(line)] = (str(line))                                            
+
                 print ('Date: ' + date + ' Infected: ' + str(infected).rjust(7)
                     + ' Death: ' + str(death).rjust(5)
                     )
@@ -172,8 +189,8 @@ def analysis_state(sheet_name, state_name):
         sheet_name['C'+str(line)] = ('=AVERAGE(C' + str(line-8) + ':C' + str(line-2)+')')
         sheet_name['C'+str(line)].number_format = '00.00%'
         
-        sheet_name['E'+str(line)] = ('=AVERAGE(E' + str(line-8) + ':E' + str(line-2)+')')
-        sheet_name['E'+str(line)].number_format = '00.00%'
+        sheet_name['F'+str(line)] = ('=AVERAGE(F' + str(line-8) + ':F' + str(line-2)+')')
+        sheet_name['F'+str(line)].number_format = '00.00%'
 
         #Projections
         line += 2
@@ -193,6 +210,7 @@ def analysis_state(sheet_name, state_name):
                         (int(sheet_name['D'+str(line-9)].value)/ int(sheet_name['D'+str(line-10)].value)) + 
                         (int(sheet_name['D'+str(line-10)].value)/int(sheet_name['D'+str(line-11)].value)) + 
                         (int(sheet_name['D'+str(line-11)].value)/int(sheet_name['D'+str(line-12)].value))) / 7
+
         
 
         print()
