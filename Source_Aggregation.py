@@ -77,17 +77,17 @@ sheet_totals = workbook.create_sheet('Projections', 0)
 
 date_object = datetime.date.today()
 
-sheet_totals['A'+str(line_total)] = 'US Death Count Projections'
+sheet_totals['A'+str(line_total)] = 'US Death Count Projections - These are projections based on the latest 7-Day Death Increase Average.'
 line_total += 1
 
 def analysis_state(sheet_name, state_name):
     try:
         global line, line_total
-        print("Parsing State: "+state_name)
+        print("Parsing State: "+state_name.title())
         death = 0
         infected = 0
         line = 1
-        sheet_name['A'+str(line)] = (state_name)
+        sheet_name['A'+str(line)] = (state_name.title())
         line += 1
         sheet_name['A'+str(line)] = ('Date')
         sheet_name['B'+str(line)] = ('Infected')
@@ -180,9 +180,9 @@ def analysis_state(sheet_name, state_name):
                     sheet_name['E'+str(line)] = ('= D' + str(line) + ' - D' + str(line-1))
                     #sheet_name['E'+str(line)] = (str(line))                                            
 
-                print ('Date: ' + date + ' Infected: ' + str(infected).rjust(7)
-                    + ' Death: ' + str(death).rjust(5)
-                    )
+                #print ('Date: ' + date + ' Infected: ' + str(infected).rjust(7)
+                #    + ' Death: ' + str(death).rjust(5)
+                #    )
                 line += 1
         line += 1
         sheet_name['A'+str(line)] = 'Average (7-Day):'
@@ -268,7 +268,7 @@ def analysis_state(sheet_name, state_name):
         sheet_totals['B'+str(line_total)].number_format = '00.00%'
 
         line_total += 1
-        starting_death
+        #starting_death
         sheet_totals['A'+str(line_total)]   = ("Today's Count")
         sheet_totals['A'+str(line_total+1)] = (starting_death)
 
@@ -338,7 +338,7 @@ analysis_state(sheet_us, 'all')
 analysis_state(sheet_ak, 'alaska')
 analysis_state(sheet_al, 'alabama')
 analysis_state(sheet_ar, 'arkansas')
-analysis_state(sheet_as, 'american somoa')
+#analysis_state(sheet_as, 'american somoa')
 analysis_state(sheet_az, 'arizona')
 analysis_state(sheet_ca, 'california')
 analysis_state(sheet_co, 'colorado')
@@ -389,7 +389,7 @@ analysis_state(sheet_wv, 'west virginia')
 analysis_state(sheet_wy, 'wyoming')
 
 
-sheet_totals.column_dimensions['A'].width = 13
+sheet_totals.column_dimensions['A'].width = 18.29
 sheet_totals.column_dimensions['B'].width = 10
 sheet_totals.column_dimensions['C'].width = 10
 #sheet_totals.column_dimensions['B'].alignment = Alignment(horizontal='right')
